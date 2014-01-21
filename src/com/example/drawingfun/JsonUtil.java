@@ -47,7 +47,7 @@ public class JsonUtil {
 					touchY = Float.parseFloat(y);
 				    drawPath.lineTo(touchX, touchY);
 				    
-				    System.out.println("Touch event x:" + x + "y:" + y );
+				    //System.out.println("Touch event x:" + x + "y:" + y );
 				}
 
 		    point = events.getJSONObject(events.length() - 1);

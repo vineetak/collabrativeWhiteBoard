@@ -50,9 +50,9 @@ public class DrawingView extends View {
 	private float brushSize, lastBrushSize;
 	
 	// create a new JSON array 
-	private JSONArray eventsJsonArray ;//= new JSONArray();
+	private JSONArray eventsJsonArray ;
 	
-	private JSONObject eventJsonObject;// = new JSONObject();
+	private JSONObject eventJsonObject;
 	
 	
 	private boolean erase=false;
@@ -129,7 +129,7 @@ public class DrawingView extends View {
 		
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			
+			System.out.println("down");
 		    drawPath.moveTo(touchX, touchY);
 		    eventsJsonArray = new JSONArray();
 
@@ -146,7 +146,7 @@ public class DrawingView extends View {
 	        
 		    break;
 		case MotionEvent.ACTION_UP:
-			
+			System.out.println("up");
 			// draw the path on the canvas
 //			drawPathOnView(drawPath,drawPaint);
 		   
@@ -227,7 +227,7 @@ public class DrawingView extends View {
 	}
 	
 	   public static String POST(String url, JSONObject jsonObject){
-//		   System.out.println("Posting mmmmdata");
+		    System.out.println("Posting data....");
 	        InputStream inputStream = null;
 	        String result = "";
 	        try {
@@ -242,7 +242,7 @@ public class DrawingView extends View {
 	 
 	            // 4. convert JSONObject to JSON to String
 	            json = jsonObject.toString();
-//	            System.out.println(json);
+	            System.out.println("Data psoted" + json);
 	            // 5. set json to StringEntity 
 	            StringEntity se = new StringEntity(json);
 	 
@@ -265,7 +265,7 @@ public class DrawingView extends View {
 	            else
 	                result = "Did not work!";
 	            
-	            System.out.println("Posting result = "+ result);
+//	            System.out.println("Posting result = "+ result);
 	            
 	        } catch (Exception e) {
 	            Log.d("InputStream", e.getLocalizedMessage());
