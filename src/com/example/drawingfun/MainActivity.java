@@ -1,36 +1,67 @@
 package com.example.drawingfun;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Calendar;
 import java.util.UUID;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+
 import android.provider.MediaStore;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.text.format.Time;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
 public class MainActivity extends Activity implements OnClickListener{
 
-	private DrawingView drawView;
+	private  DrawingView drawView;
 	
 //	private ImageButton currPaint;
 	private ImageButton currPaint, drawBtn, eraseBtn, newBtn, saveBtn;
 
-	private float smallBrush, mediumBrush, largeBrush;
+	private Intent intent;
+	public static float smallBrush, mediumBrush, largeBrush;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        String userID = getIntent().getExtras().getString("userID");
+        
+        
         // get the view using the id defined in the main activity file
         drawView = (DrawingView)findViewById(R.id.drawing);
+        DrawingView.setUserID(userID);
         
+        System.out.println(" MAIN DRAWING VIEW ID " + userID);
+
         // get the paint colors
         LinearLayout paintLayout = (LinearLayout)findViewById(R.id.paint_colors);
         
@@ -60,9 +91,49 @@ public class MainActivity extends Activity implements OnClickListener{
         // save 
         saveBtn = (ImageButton)findViewById(R.id.save_btn);
         saveBtn.setOnClickListener(this);
+        
+          
+        intent = new Intent(this, UpdateDrawingView.class);
+        intent.putExtra("userID", userID);
+//        // start the service to get the updates from the server
+//        Intent ii = new Intent(getApplicationContext(), UpdateDrawingView.class);
+//        PendingIntent pi = PendingIntent.getService(getApplicationContext(), 0, ii,
+//        PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//         
+//      Calendar cal = Calendar.getInstance(); 
+//  
+//      //registering our pending intent with alarmmanager 
+//      AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE); 
+//
+//      // to attach the intent to the alarm to run the service every 10 seconds
+//      am.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 10000, pi); 
+
     }
 
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+       
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			
+			// TODO Auto-generated method stub
+			drawView.updateView();
+		}
+    };  
 
+    @Override
+    public void onResume() {
+            super.onResume();                
+            startService(intent);
+            registerReceiver(broadcastReceiver, new IntentFilter(UpdateDrawingView.BROADCAST_ACTION));
+    }
+    
+    @Override
+    public void onPause() {
+            super.onPause();
+            unregisterReceiver(broadcastReceiver);
+            stopService(intent);                 
+    }    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -230,4 +301,6 @@ public class MainActivity extends Activity implements OnClickListener{
     	}
 
     }
+    
+  
 }
