@@ -50,7 +50,11 @@ public class UpdateDrawingView extends Service {
 	private Runnable sendUpdatesToUI = new Runnable() {
 		public void run() {
 			//     requestHttp();
-			new DoBackgroundTask().execute("http://1-dot-collaborativewhiteboard.appspot.com/collabrativewhiteboard");
+		//	String getUrl = url + "?userID=" + DrawingView.getUserID();
+			String getUrl = url + "?userID=" + DrawingView.getUserID() + "&drawingID=" + DrawingView.getDrawingID() +"&type=update";
+
+//			new DoBackgroundTask().execute("http://1-dot-collaborativewhiteboard.appspot.com/collabrativewhiteboard");
+			new DoBackgroundTask().execute(getUrl);
 			handler.postDelayed(this, 1000); // 10 seconds
 		}
 	};
@@ -82,8 +86,7 @@ public class UpdateDrawingView extends Service {
 
 		private void requestHttp(){
 			HttpClient httpClient = new DefaultHttpClient();
-			String getUrl = url + "?userID=" + DrawingView.getUserID();
-			HttpGet httpGet = new HttpGet(getUrl);
+			HttpGet httpGet = new HttpGet(url);
 			HttpResponse httpResponse = null;
 			try {
 				httpResponse = httpClient.execute(httpGet);
@@ -121,7 +124,7 @@ public class UpdateDrawingView extends Service {
 
 				if(result.isEmpty()){
 
-					System.out.println("Empty response");
+				//	System.out.println("Empty response");
 					return;
 				}
 

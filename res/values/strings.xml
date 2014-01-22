@@ -10,9 +10,14 @@
 	<string name="erase">Erase</string>
 	<string name="save">Save</string>
 	<string name="paint">Paint</string>
-
+	<string name="invite">Invite</string>
 		<!--  Brush sizes -->
 	<string name="sml">Small</string>
 	<string name="med">Medium</string>
 	<string name="lrg">Large</string>
+	
+	<string name="joinexisting">Join Existing Drawing</string>
+	<string name="startnew">Start New Drawing</string>
+	<string name="waitingforresponse">Waiting to join</string>
+	
 </resources>

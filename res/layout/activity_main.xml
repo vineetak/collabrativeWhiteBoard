@@ -41,6 +41,14 @@
     android:layout_height="fill_parent"
     android:contentDescription="@string/save"
     android:src="@drawable/save" />
+	
+		<ImageButton
+    android:id="@+id/invite"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:contentDescription="@string/invite"
+    android:src="@drawable/invite" />
+		
 	</LinearLayout>
 	
  	<com.example.drawingfun.DrawingView

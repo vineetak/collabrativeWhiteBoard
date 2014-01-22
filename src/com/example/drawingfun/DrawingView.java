@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-//import com.example.httppostget.HttpAsyncTask;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -44,6 +43,7 @@ public class DrawingView extends View {
 	private int paintColor = 0xFF660000;
 	//canvas
 	private static Canvas drawCanvas;
+	private static String drawingID;
 	//canvas bitmap
 	private Bitmap canvasBitmap;
 	// brush sizes
@@ -213,10 +213,10 @@ public class DrawingView extends View {
 		//set erase true or false
 		erase=isErase;
 		if(erase){ 
-//			drawPaint.setColor(canvasPaint.getColor());
+			drawPaint.setColor(canvasPaint.getColor());
 			
 //			drawPaint.setAlpha(0xFF);
-			drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY));
+//			drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY));
 		
 		}
 		else drawPaint.setXfermode(null);
@@ -281,6 +281,7 @@ public class DrawingView extends View {
     	   JSONObject jsonObject = new JSONObject();
            try {
 				jsonObject.put("userID", userID);
+				jsonObject.put("drawingID", drawingID);
 				jsonObject.put("events",eventsJsonArray);
 				jsonObject.put("color", paintColor);
 				jsonObject.put("brush-size", brushSize);
@@ -311,6 +312,16 @@ public class DrawingView extends View {
 
    public void updateView() {
 	   invalidate();
-   } 
+   }
+
+public static String getDrawingID() {
+	
+	return drawingID;
+}
+
+public static void setDrawingID(String drawingID2) {
+	drawingID = drawingID2;
+	
+} 
 	
 }
