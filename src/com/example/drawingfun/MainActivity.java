@@ -54,8 +54,7 @@ public class MainActivity extends Activity implements OnClickListener{
         setContentView(R.layout.activity_main);
         
         String userID = getIntent().getExtras().getString("userID");
-        
-        
+           
         // get the view using the id defined in the main activity file
         drawView = (DrawingView)findViewById(R.id.drawing);
         DrawingView.setUserID(userID);
@@ -95,19 +94,7 @@ public class MainActivity extends Activity implements OnClickListener{
           
         intent = new Intent(this, UpdateDrawingView.class);
         intent.putExtra("userID", userID);
-//        // start the service to get the updates from the server
-//        Intent ii = new Intent(getApplicationContext(), UpdateDrawingView.class);
-//        PendingIntent pi = PendingIntent.getService(getApplicationContext(), 0, ii,
-//        PendingIntent.FLAG_CANCEL_CURRENT);
-//
-//         
-//      Calendar cal = Calendar.getInstance(); 
-//  
-//      //registering our pending intent with alarmmanager 
-//      AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE); 
-//
-//      // to attach the intent to the alarm to run the service every 10 seconds
-//      am.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 10000, pi); 
+
 
     }
 

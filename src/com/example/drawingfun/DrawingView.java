@@ -157,6 +157,7 @@ public class DrawingView extends View {
 		    eventJsonObject = JsonUtil.toJson(event);
 		    eventsJsonArray.put(eventJsonObject);
 
+		    
 		    drawCanvas.drawPath(drawPath, drawPaint);
 		   
 		    drawPath.reset();
@@ -213,13 +214,12 @@ public class DrawingView extends View {
 		//set erase true or false
 		erase=isErase;
 		if(erase){ 
-//			drawPaint.setColor(canvasPaint.getColor());
-			
-//			drawPaint.setAlpha(0xFF);
-			drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY));
+			drawPaint.setColor(canvasPaint.getColor());
+			paintColor = canvasPaint.getColor();
+			drawPaint.setAlpha(0xFF);
 		
 		}
-		else drawPaint.setXfermode(null);
+
 	}
 	public void startNew(){
 	    drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
