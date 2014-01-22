@@ -110,10 +110,10 @@ public class UpdateDrawingView extends Service {
 					e.printStackTrace();
 				}
 
-				// 10. convert inputstream to string
+				//  convert inputstream to string
 				if(inputStream != null)
 					try {
-						result = DrawingView.convertInputStreamToString(inputStream);
+						result = JsonUtil.convertInputStreamToString(inputStream);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

@@ -1,15 +1,30 @@
 package com.example.drawingfun;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.Path;
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class JsonUtil {
 	
-	// create a new json object from the event 
+	/**
+	 * Create a JSONObject from the motionevent object
+	 * @param event
+	 * @return
+	 */
 	public static JSONObject toJson(MotionEvent event){
 				
 		JSONObject jsonObj = new JSONObject();
@@ -25,13 +40,19 @@ public class JsonUtil {
 		return jsonObj;
 	}
 
+	/**
+	 * This method creates an android.graphics.Path object from the JSON array containing the touch events.
+	 * It assumes that the first event array is the touch begin and the last event in the array is the touch end. All the events 
+	 * in between are added to the path.
+	 * @param events
+	 * @return
+	 */
 	// create a path from the JSON object containing an array of points
 	public static Path createAndroidPathFromJson(JSONArray events){
 		
 		Path drawPath = new Path();
 		try {
-//			JSONArray jArr = events.getJSONArray("events");
-			
+
 			JSONObject point = (JSONObject) events.getJSONObject(0);
 			
 			float touchX = Float.parseFloat(point.getString("x"));
@@ -47,18 +68,11 @@ public class JsonUtil {
 					touchY = Float.parseFloat(y);
 				    drawPath.lineTo(touchX, touchY);
 				    
-				    //System.out.println("Touch event x:" + x + "y:" + y );
 				}
 
 		    point = events.getJSONObject(events.length() - 1);
 			touchX = Float.parseFloat(point.getString("x"));
 			touchY = Float.parseFloat(point.getString("y"));
-
-			// now is the time to draw
-		//	Object drawPaint;
-			// finally draw this path using the paint 
-			//drawCanvas.drawPath(drawPath, drawPaint);
-			//drawPath.lineTo(touchX, touchY);
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -67,4 +81,76 @@ public class JsonUtil {
 		return drawPath;
 		
 	}
+	
+	/**
+	 * This method creates a new httpclient and posts the JSONObject to the server using Http post 
+	 * @param url URL of the server
+	 * @param jsonObject The object to post to the server
+	 * @return 
+	 */
+	public static String POST(String url, JSONObject jsonObject){
+		System.out.println("Posting data....");
+		InputStream inputStream = null;
+		String result = "";
+		try {
+
+			// create HttpClient
+			HttpClient httpclient = new DefaultHttpClient();
+
+			// make POST request to the given URL
+			HttpPost httpPost = new HttpPost(url);
+
+			String json = "";
+
+			// convert JSONObject to JSON to String
+			json = jsonObject.toString();
+//			System.out.println("Data posted" + json);
+			
+			//  set json to StringEntity 
+			StringEntity se = new StringEntity(json);
+
+			// set httpPost Entity
+			httpPost.setEntity(se);
+
+			// 7. Set some headers to inform server about the type of the content   
+			httpPost.setHeader("Accept", "application/json");
+			httpPost.setHeader("Content-type", "application/json");
+
+			// 8. Execute POST request to the given URL
+			HttpResponse httpResponse = httpclient.execute(httpPost);
+
+			// 9. receive response as inputStream
+			inputStream = httpResponse.getEntity().getContent();
+
+			// convert inputstream to string
+			if(inputStream != null)
+				result = convertInputStreamToString(inputStream);
+			else
+				result = "Did not work!";
+
+
+		} catch (Exception e) {
+			Log.d("InputStream", e.getLocalizedMessage());
+		}
+		
+		return result;
+	}
+	/**
+	 *  This is a utility function to convert the input stream object to String
+	 * @param inputStream
+	 * @return
+	 * @throws IOException
+	 */
+	public static String convertInputStreamToString(InputStream inputStream) throws IOException{
+		BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+		String line = "";
+		String result = "";
+		while((line = bufferedReader.readLine()) != null)
+			result += line;
+
+		inputStream.close();
+		return result;
+
+	}
+
 }

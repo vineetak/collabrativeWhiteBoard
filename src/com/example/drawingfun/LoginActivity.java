@@ -6,7 +6,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-
+/**
+ * This is class represents the login avtivity, which lets the user select a login ID 
+ * and creats the drawing Activity
+ * @author vineetak
+ *
+ */
 public class LoginActivity extends Activity {
 
 	@Override
@@ -27,7 +32,7 @@ public class LoginActivity extends Activity {
                 /// Create Intent for drawView activity and abd Start The Activity
 		    	// TODO change the name of this MainActivity
 		    	
-                Intent intentDrawView =new Intent(getApplicationContext(),MainActivity.class);
+                Intent intentDrawView =new Intent(getApplicationContext(),DrawingActivity.class);
                 
                 String userName=editTextUserName.getText().toString();
                 intentDrawView.putExtra("userID", userName);
